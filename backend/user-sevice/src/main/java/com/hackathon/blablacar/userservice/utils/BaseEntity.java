@@ -1,5 +1,8 @@
 package com.hackathon.blablacar.userservice.utils;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Column;
@@ -14,6 +17,8 @@ import java.util.UUID;
  * @Project user-service
  */
 @MappedSuperclass
+@NoArgsConstructor
+@AllArgsConstructor
 public class BaseEntity {
 
     @Id
