@@ -1,5 +1,5 @@
 server:
-  port: 8083
+  port: 8080
 spring:
   h2:
     console:
@@ -8,3 +8,6 @@ spring:
     driver-class-name: org.h2.Driver
     username: test
     password: test
+
+  swagger-ui:
+    path: /swagger-ui.html
