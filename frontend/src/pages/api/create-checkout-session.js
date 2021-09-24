@@ -36,7 +36,7 @@ export default async(req, res) => {
 
     const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
-        shipping_rates: ["shr_1ItxEGD8l9oFdCaKmyn7pZyk"], // Created fees in Stripe's dashboard
+        shipping_rates: ["shr_1JdLsKBFpoKL5d0k90kWgU6O"], // Created fees in Stripe's dashboard
         shipping_address_collection: {
             allowed_countries: ["GB", "US", "CA", "FR"], // RTFM!
         },
@@ -50,7 +50,7 @@ export default async(req, res) => {
         },
     });
 
-    console.log("session created!", session.id);
+    console.log("session created!", session);
 
     res.status(200).json({ id: session.id });
 };

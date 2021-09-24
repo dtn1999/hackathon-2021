@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.util.NoSuchElementException;
+
 /**
  * @author danyls ngongang
  * @Created 24/09/2021-04:18
@@ -19,7 +21,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class RestControllerAdvise extends ResponseEntityExceptionHandler {
 
 
-    @ExceptionHandler(value = {ConstraintViolationException.class})
+    @ExceptionHandler(value = {ConstraintViolationException.class, NoSuchElementException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity handleValidationException(RuntimeException ex, WebRequest request){
 

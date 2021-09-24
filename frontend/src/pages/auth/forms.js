@@ -20,8 +20,6 @@ export const registrationFormValidation = Yup.object({
 });
 
 export const loginFormValidation = Yup.object({
-    name: Yup.string().min(3).max(50).required(),
     email: Yup.string().email().required(),
     password: Yup.string().min(6).required(),
-    confirmPassword: Yup.string().min(6).required(),
 });

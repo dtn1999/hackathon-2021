@@ -3,36 +3,7 @@ import moment from "moment";
 import { groupBy, isString } from "lodash";
 import path from "path";
 
-function Order({ id, amount, amountShipping, images, timestamp, items }) {
-    let groupedImages;
-
-    if (images.every((image) => !image.startsWith("["))) {
-        // If it doesn't starts with an "[", then it's not an array, so we should fix this
-        /*
-            Must be done for retro-compatibility
-            as the previous orders in the DB have the "images" formatted in this old way :
-                [
-                    "https://fakestoreapi.com/img/imageAAA.jpg",
-                    "https://fakestoreapi.com/img/imageAAA.jpg",
-                    "https://fakestoreapi.com/img/imageBBB.jpg",
-                ]
-            
-            We have to transform them into this structure :
-                [
-                    "[2, 'imageAAA.jpg']",
-                    "[1, 'imageBBB.jpg']",
-                ]
-        */
-        groupedImages = Object.values(
-            groupBy(images.map((image) => path.basename(image)))
-        ).map((group) => [group.length, group[0]]);
-        console.log(1, groupedImages);
-    } else {
-        // All clean here, just parse the text value into an array, because it was stringified in the firestore DB ( "[2,'imageA.jpg']"  ->  [2, 'imageA.jpg'] )
-        groupedImages = [...images.map((image) => JSON.parse(image))];
-        console.log(2, groupedImages);
-    }
-
+function Order({ id, amount, amountShipping, timestamp, items }) {
     return (
         <div className="relative border rounded-md">
             <div className="block sm:flex items-center sm:space-x-10 p-5 bg-gray-100 text-sm text-gray-600">
@@ -62,8 +33,8 @@ function Order({ id, amount, amountShipping, images, timestamp, items }) {
                     ORDER #{id}
                 </p>
             </div>
-
-            <div className="p-5 sm:p-10">
+            {/**
+ *             <div className="p-5 sm:p-10">
                 <div className="flex space-x-6 overflow-x-auto">
                     {groupedImages.map((group) => (
                         <div className="relative" key={group[1]}>
@@ -81,6 +52,7 @@ function Order({ id, amount, amountShipping, images, timestamp, items }) {
                     ))}
                 </div>
             </div>
+ */}
         </div>
     );
 }

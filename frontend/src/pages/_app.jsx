@@ -23,6 +23,16 @@ store.dispatch(hydrate(basket));
 const MyApp = ({ Component, pageProps }) => {
     const [user, setUser] = React.useState({});
 
+    React.useEffect(() => {
+        const json = localStorage.getItem("amazone-clone-auth");
+        if (json) {
+            const { username, userEmail } = JSON.parse(json);
+            setUser({
+                username,
+                userEmail,
+            });
+        }
+    }, []);
     return (
         <AuthProvider session={pageProps.session}>
             <AuthContext.Provider

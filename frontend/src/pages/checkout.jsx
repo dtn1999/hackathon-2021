@@ -1,3 +1,4 @@
+import React from "react";
 import Image from "next/image";
 import { useSelector } from "react-redux";
 import Header from "../components/Header";
@@ -8,13 +9,15 @@ import { useSession } from "next-auth/client";
 import { groupBy } from "lodash";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { loadStripe } from "@stripe/stripe-js";
+import AuthContext from "../context/AuthContext";
+
 import axios from "axios";
 const stripePromise = loadStripe(process.env.stripe_public_key); // Variable d'environnement définie par le fichier next.config.js, pour le front
 
 function Checkout() {
     const items = useSelector(selectItems);
     const total = useSelector(selectTotal);
-    const [session] = useSession();
+    const { user } = React.useContext(AuthContext);
 
     async function createCheckoutSession() {
         const stripe = await stripePromise;
@@ -24,9 +27,11 @@ function Checkout() {
             "/api/create-checkout-session",
             {
                 items,
-                email: session.user.email,
+                email: user.userEmail,
             }
         );
+
+        console.log("checkoutSession", checkoutSession);
 
         // After have created a session, redirect the user/customer to Stripe Checkout
         const result = await stripe.redirectToCheckout({
@@ -39,6 +44,7 @@ function Checkout() {
     }
 
     const groupedItems = Object.values(groupBy(items, "id"));
+    console.log("groupedItems", groupedItems);
     return (
         <div className="bg-gray-100">
             <Header />
@@ -103,10 +109,10 @@ function Checkout() {
                             role="link"
                             onClick={createCheckoutSession}
                             className={`button mt-2 ${
-                                !session &&
+                                !user &&
                                 "from-gray-300 to-gray-500 border-gray-200 text-gray-300 cursor-not-allowed hover:from-gray-300"
                             }`}>
-                            {!session
+                            {!user
                                 ? "Sign in to checkout"
                                 : "Proceed to checkout"}
                         </button>

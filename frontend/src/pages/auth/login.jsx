@@ -5,6 +5,7 @@ import Link from "next/link";
 import Aggreement from "../../components/Aggreement";
 import { useFormik } from "formik";
 import { loginFormValidation, loginIntialValues } from "./forms";
+import AuthContext from "../../context/AuthContext";
 import RestClient from "../../services/RestClient";
 
 const loginPage = () => {
@@ -13,13 +14,32 @@ const loginPage = () => {
         router.push("/auth/register");
     }, []);
 
+    const { setUser } = React.useContext(AuthContext);
+
     const formik = useFormik({
-        initialValues: loginIntialValues,
-        validationSchema: loginFormValidation,
-        onSubmit: async (values, { resetForm, setErrors }) => {
-            const response = await RestClient.logUserIn(values);
+        initialValues: {
+            ...loginIntialValues,
         },
+        onSubmit: async (values, {}) => {
+            console.log("heool");
+            const response = await RestClient.logUserIn(values);
+            console.log(response);
+            if (response.success) {
+                const { username, userEmail } = response;
+                setUser({
+                    username,
+                    userEmail,
+                });
+                router.push("/");
+                return;
+            }
+
+            alert(response.error);
+            //  resetForm();
+        },
+        validationSchema: loginFormValidation,
     });
+
     return (
         <div className="bg-white flex flex-col items-center pt-16">
             <div className="flex flex-row justify-items-center">
@@ -50,7 +70,7 @@ const loginPage = () => {
                         </label>
                         <div className="mt-1">
                             <input
-                                type="text"
+                                type="email"
                                 id="email"
                                 value={formik.values.email}
                                 onChange={formik.handleChange}
@@ -87,7 +107,7 @@ const loginPage = () => {
                         </div>
                         <div className="mt-1">
                             <input
-                                type="text"
+                                type="password"
                                 id="password"
                                 value={formik.values.password}
                                 onChange={formik.handleChange}
@@ -109,9 +129,15 @@ const loginPage = () => {
                         </div>
                     </div>
 
-                    <button className="bg-amazon w-full font-normal rounded-sm border py-1.5 text-sm">
-                        {" "}
-                        Sign-In{" "}
+                    <button
+                        type="button"
+                        disabled={!formik.isValid}
+                        onClick={() => {
+                            formik.handleSubmit();
+                            console.log("after ");
+                        }}
+                        className="bg-amazon w-full font-normal rounded-sm border py-1.5 text-sm">
+                        Sign-In
                     </button>
 
                     <Aggreement />
@@ -126,6 +152,7 @@ const loginPage = () => {
                 </div>
 
                 <button
+                    type="button"
                     className="bg-gray-200 w-full font-normal rounded-sm border py-1.5 text-sm"
                     onClick={navigateToRegistration}>
                     Create Your Amazone clone account

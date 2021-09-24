@@ -24,7 +24,7 @@ import java.util.Collection;
  * @Created 10/09/2021-11:31
  * @Project user-service
  */
-@Entity(name = "person")
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

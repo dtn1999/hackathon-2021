@@ -1,14 +1,15 @@
+import React from "react";
 import { getSession, useSession } from "next-auth/client";
 import { db } from "../../firebase";
 import Header from "../components/Header";
 import Order from "../components/Order";
 import moment from "moment";
 import { useRouter } from "next/router";
-
+import AuthContext from "../context/AuthContext";
 function Orders({ orders }) {
     const [session] = useSession();
     const router = useRouter();
-
+    const { user } = React.useContext(AuthContext);
     return (
         <div>
             <Header />
@@ -68,6 +69,8 @@ export async function getServerSideProps(context) {
     // Get the user logged in credentials...
     const session = await getSession(context);
 
+    console.log(context);
+
     if (!session) {
         return { props: {} };
     }
@@ -93,6 +96,17 @@ export async function getServerSideProps(context) {
             ).data,
         }))
     );
+
+    const response = await fetch("http://localhost:8080/api/orders").then(
+        (res) => res.json()
+    );
+
+    response.data.map((order) => {
+        const { id, amount, items, data, timestamp } = order;
+        return {
+            id: order.id,
+        };
+    });
 
     return { props: { orders } };
 }

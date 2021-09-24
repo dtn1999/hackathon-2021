@@ -38,7 +38,7 @@ public class OrderService {
         // validate the given order ( control if product still in stock )
         try {
             validateOrder(order);
-
+    
             order.getItems().addAll(
                     orderItemRepository.saveAll(order.getItems())
             );

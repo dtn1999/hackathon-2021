@@ -14,12 +14,18 @@ export default {
             ).then((res) => res.json());
 
             if (response.success) {
-                localStorage.getItem(
+                localStorage.setItem(
                     "amazone-clone-auth",
-                    `Bearer ${response.data}`
+                    JSON.stringify(response.data)
                 );
             }
-            return response;
+            const { username, userEmail } = response.data;
+
+            return {
+                username,
+                userEmail,
+                success: true,
+            };
         }
         return { success: false };
     },
@@ -36,15 +42,22 @@ export default {
             ).then((res) => res.json());
 
             if (response.success) {
-                localStorage.getItem(
+                localStorage.setItem(
                     "amazone-clone-auth",
-                    `Bearer ${response.data}`
+                    JSON.stringify(response.data)
                 );
             }
-            return response;
+            const { username, userEmail } = response.data;
+
+            return {
+                username,
+                userEmail,
+                success: true,
+            };
         }
         return { success: false };
     },
+
     logUserOut: async() => {
         const response = await fetch("http://localhost:8080/api/auth/logout", {
             method: "POST",
@@ -54,7 +67,7 @@ export default {
         }).then((res) => res.json());
 
         if (response.success) {
-            localStorage.getItem("amazone-clone-auth", ``);
+            localStorage.setItem("amazone-clone-auth", ``);
         }
         return response;
     },

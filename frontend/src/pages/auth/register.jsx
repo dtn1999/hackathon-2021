@@ -4,14 +4,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useFormik } from "formik";
+import AuthContext from "../../context/AuthContext";
 import RestClient from "../../services/RestClient";
 import { registrationFormValidation, registrationIntialValues } from "./forms";
 
 const RegisterPage = () => {
     const router = useRouter();
+    const { setUser } = React.useContext(AuthContext);
+
     const goToSignIn = React.useCallback(() => {
         router.push("/auth/login");
     }, []);
+
     const formik = useFormik({
         initialValues: {
             ...registrationIntialValues,
@@ -28,6 +32,11 @@ const RegisterPage = () => {
             const response = await RestClient.registerUser(requestPayload);
             console.log(response);
             if (response.success) {
+                const { username, userEmail } = response;
+                setUser({
+                    username,
+                    userEmail,
+                });
                 router.push("/");
                 return;
             }

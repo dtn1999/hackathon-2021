@@ -35,7 +35,7 @@ public class UserService implements UserDetailsService {
     public ApiResponse registerUser(@Valid RegisterRequest request) {
         User user = userRepository.save(
                 User.builder()
-                .password( request.getPassword())
+                .password( passwordEncoder.encode(request.getPassword() ))
                 .name( request.getName())
                 .role(request.getRole())
                 .email(request.getEmail())
@@ -46,6 +46,8 @@ public class UserService implements UserDetailsService {
                 .data( AuthResponse.builder()
                         .accessToken( jwtUtils.generateToken( user.getUsername()))
                         .expiration( jwtUtils.getExpirationDuration() )
+                        .username( user.getName())
+                        .userEmail( user.getEmail() )
                         .build() )
                 .error(null)
                 .build();
@@ -66,6 +68,8 @@ public class UserService implements UserDetailsService {
                         .data( AuthResponse.builder()
                                 .accessToken( jwtUtils.generateToken( user.get().getUsername() ))
                                 .expiration( jwtUtils.getExpirationDuration() )
+                                .username( user.get().getName())
+                                .userEmail( user.get().getEmail() )
                                 .build() )
                         .error(null)
                         .build();
