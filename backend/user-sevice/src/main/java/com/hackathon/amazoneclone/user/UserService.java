@@ -1,11 +1,13 @@
 package com.hackathon.amazoneclone.user;
 
+import com.hackathon.amazoneclone.notification.MailService;
 import com.hackathon.amazoneclone.security.JWTUtils;
 import com.hackathon.amazoneclone.user.dto.AuthResponse;
 import com.hackathon.amazoneclone.user.dto.LoginRequest;
 import com.hackathon.amazoneclone.user.dto.RegisterRequest;
 import com.hackathon.amazoneclone.utils.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.env.Environment;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,6 +29,8 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final JWTUtils jwtUtils;
     private  final PasswordEncoder passwordEncoder;
+    private final MailService mailService;
+    private final Environment env;
 
     public ApiResponse registerUser(@Valid RegisterRequest request) {
         User user = userRepository.save(
@@ -37,7 +41,10 @@ public class UserService implements UserDetailsService {
                 .email(request.getEmail())
                 .build());
 
-    return ApiResponse.builder()
+        Optional<String> response = mailService.sendMailToUser(user);
+        System.out.println( response );
+
+        return ApiResponse.builder()
                 .success( true )
                 .data( AuthResponse.builder()
                         .accessToken( jwtUtils.generateToken( user.getUsername()))
