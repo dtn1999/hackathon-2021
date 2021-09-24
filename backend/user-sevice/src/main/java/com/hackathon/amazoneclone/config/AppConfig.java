@@ -1,11 +1,9 @@
 package com.hackathon.amazoneclone.config;
 
 import com.google.maps.GeoApiContext;
-import com.sendgrid.SendGrid;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -17,7 +15,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  * @Project user-service
  */
 @Configuration
-@PropertySource("classpath:application-secret.yml")
+@PropertySource("classpath:application-secret.properties")
 @EnableJpaRepositories(basePackages = "com.hackathon.amazoneclone")
 public class AppConfig {
 
@@ -37,11 +35,5 @@ public class AppConfig {
                         .description( "Blablacar clone is a clone API ")
                         .termsOfService("http://swagger.io/terms/")
                         .license(new License().name("Apache 2.0").url("http://springdoc.org")));
-    }
-
-
-    @Bean
-    public SendGrid sendGrid(@Value("${SENDGRID_API_KEY}") String apiKey){
-        return new SendGrid( apiKey);
     }
 }

@@ -41,9 +41,6 @@ public class UserService implements UserDetailsService {
                 .email(request.getEmail())
                 .build());
 
-        Optional<String> response = mailService.sendMailToUser(user);
-        System.out.println( response );
-
         return ApiResponse.builder()
                 .success( true )
                 .data( AuthResponse.builder()

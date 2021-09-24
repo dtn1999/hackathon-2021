@@ -8,6 +8,7 @@ import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
@@ -38,6 +39,10 @@ public class Product extends BaseEntity {
 
     @NotNull
     private String image;
+
+    @NotNull
+    @Min( value =  0)
+    private Integer quantity;
 
     @Embedded
     private Rating rating;

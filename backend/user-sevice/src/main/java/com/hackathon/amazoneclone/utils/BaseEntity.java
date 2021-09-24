@@ -1,6 +1,7 @@
 package com.hackathon.amazoneclone.utils;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.GenericGenerator;
@@ -19,6 +20,7 @@ import java.util.UUID;
 @MappedSuperclass
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 @SuperBuilder
 public class BaseEntity {
 
