@@ -50,7 +50,13 @@ function Header(props) {
                 {/* Right */}
                 <div className="text-white flex items-center text-xs space-x-6 mx-6 whitespace-nowrap">
                     <div
-                        onClick={!session ? signIn : signOut}
+                        onClick={
+                            !session
+                                ? () => {
+                                      router.push("/auth/login");
+                                  }
+                                : signOut
+                        }
                         className="link cursor-pointer">
                         <p className="hover:underline">
                             {session

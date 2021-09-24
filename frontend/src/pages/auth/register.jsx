@@ -1,18 +1,56 @@
 import React from "react";
 import Aggreement from "../../components/Aggreement";
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useFormik } from "formik";
+import RestClient from "../../services/RestClient";
+import { registrationFormValidation, registrationIntialValues } from "./forms";
 
 const RegisterPage = () => {
+    const router = useRouter();
+    const goToSignIn = React.useCallback(() => {
+        router.push("/auth/login");
+    }, []);
+    const formik = useFormik({
+        initialValues: {
+            ...registrationIntialValues,
+        },
+        onSubmit: async (values, { resetForm, setErrors }) => {
+            if (values.confirmPassword !== values.password) {
+                setErrors({
+                    confirmPassword:
+                        "password confirmation doesn't match the password",
+                });
+                return;
+            }
+            const { confirmPassword, ...requestPayload } = values;
+            const response = await RestClient.registerUser(requestPayload);
+            console.log(response);
+            if (response.success) {
+                router.push("/");
+                return;
+            }
+
+            alert(response.error);
+            //  resetForm();
+        },
+        validationSchema: registrationFormValidation,
+    });
     return (
-        <div className="bg-white flex flex-col items-center pt-2">
+        <div className="bg-white flex flex-col items-center pt-16">
             <div className="flex flex-row justify-items-center">
-                <Image
-                    className="object-cover"
-                    src="/Amazon logo.png"
-                    alt="Amazone logo"
-                    width={140}
-                    height={40}
-                />
+                <Link href="/">
+                    <a>
+                        <Image
+                            className="object-cover"
+                            src="/Amazon logo.png"
+                            alt="Amazone logo"
+                            width={140}
+                            height={40}
+                        />
+                    </a>
+                </Link>
             </div>
             <div className="min-w-max mt-3">
                 <form
@@ -30,8 +68,24 @@ const RegisterPage = () => {
                         <div className="mt-1">
                             <input
                                 type="text"
-                                className="w-full rounded-sm border py-0.5 focus:ring-1 focus:ring-amazon focus:border-amazon focus:outline-none"
+                                id="name"
+                                value={formik.values.name}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                className={`px-2 w-full rounded-sm border py-0.5 focus:ring-1 focus:ring-amazon focus:border-amazon focus:outline-none ${
+                                    formik.errors.name
+                                        ? "border-red-400 ring-2 ring-red-400"
+                                        : ""
+                                }`}
                             />
+                            {formik.errors.name ? (
+                                <span className="text-sm font-normal mt-4 text-red-500">
+                                    {" "}
+                                    {formik.errors.name}{" "}
+                                </span>
+                            ) : (
+                                <></>
+                            )}
                         </div>
                     </div>
                     <div>
@@ -41,9 +95,25 @@ const RegisterPage = () => {
                         </label>
                         <div className="mt-1">
                             <input
-                                type="text"
-                                className="w-full rounded-sm border py-0.5 focus:ring-1 focus:ring-amazon focus:border-amazon focus:outline-none"
+                                type="email"
+                                id="email"
+                                value={formik.values.email}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                className={`px-2 w-full rounded-sm border py-0.5 focus:ring-1 focus:ring-amazon focus:border-amazon focus:outline-none ${
+                                    formik.errors.email
+                                        ? "border-red-400 ring-2 ring-red-400"
+                                        : ""
+                                }`}
                             />
+                            {formik.errors.email ? (
+                                <span className="text-sm font-normal mt-4 text-red-500">
+                                    {" "}
+                                    {formik.errors.email}{" "}
+                                </span>
+                            ) : (
+                                <></>
+                            )}
                         </div>
                     </div>
                     <div>
@@ -55,26 +125,61 @@ const RegisterPage = () => {
                         </label>
                         <div className="mt-1">
                             <input
-                                type="text"
-                                className="w-full rounded-sm border py-0.5 focus:ring-1 focus:ring-amazon focus:border-amazon focus:outline-none"
+                                type="password"
+                                id="password"
+                                value={formik.values.password}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                className={`px-2 w-full rounded-sm border py-0.5 focus:ring-1 focus:ring-amazon focus:border-amazon focus:outline-none ${
+                                    formik.errors.password
+                                        ? "border-red-400 ring-2 ring-red-400"
+                                        : ""
+                                }`}
                             />
+                            {formik.errors.password ? (
+                                <span className="text-sm font-normal mt-4 text-red-500">
+                                    {" "}
+                                    {formik.errors.password}{" "}
+                                </span>
+                            ) : (
+                                <></>
+                            )}
                         </div>
                     </div>
                     <div>
                         <label
-                            htmlFor="passwordConfirm"
+                            htmlFor="confirmPassword"
                             className="font-medium text-sm">
                             {" "}
                             Re-enter password{" "}
                         </label>
                         <div className="mt-1">
                             <input
-                                type="text"
-                                className="w-full rounded-sm border py-0.5 focus:ring-1 focus:ring-amazon focus:border-amazon focus:outline-none"
+                                type="password"
+                                id="confirmPassword"
+                                value={formik.values.confirmPassword}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                className={`px-2 w-full rounded-sm border py-0.5 focus:ring-1 focus:ring-amazon focus:border-amazon focus:outline-none ${
+                                    formik.errors.confirmPassword
+                                        ? "border-red-400 ring-2 ring-red-400"
+                                        : ""
+                                }`}
                             />
+                            {formik.errors.confirmPassword ? (
+                                <span className="text-sm font-normal mt-4 text-red-500">
+                                    {" "}
+                                    {formik.errors.confirmPassword}{" "}
+                                </span>
+                            ) : (
+                                <></>
+                            )}
                         </div>
                     </div>
-                    <button className="bg-amazon w-full font-normal rounded-sm border py-1.5 text-sm">
+                    <button
+                        type="submit"
+                        onClick={formik.handleSubmit}
+                        className="bg-amazon w-full font-normal rounded-sm border py-1.5 text-sm">
                         {" "}
                         Continue{" "}
                     </button>
@@ -85,6 +190,7 @@ const RegisterPage = () => {
                         Already have an account?{" "}
                         <a
                             href="#"
+                            onClick={goToSignIn}
                             className="text-link hover:text-amazon hover:underline">
                             Sign In
                         </a>

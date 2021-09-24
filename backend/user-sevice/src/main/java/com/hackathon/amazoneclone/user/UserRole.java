@@ -6,8 +6,6 @@ package com.hackathon.amazoneclone.user;
  * @Project user-service
  */
 public enum UserRole {
-    PASSENGER,
-    DRIVER,
     CUSTOMER,
     OWNER
     ;

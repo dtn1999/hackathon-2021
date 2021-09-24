@@ -37,13 +37,14 @@ public class User extends BaseEntity implements UserDetails {
 
     @Enumerated( EnumType.STRING)
     @Column(nullable = false)
-    private  UserRole role = UserRole.PASSENGER;
+    private  UserRole role = UserRole.CUSTOMER;
 
     @NotNull
     @Size(min = 3, max = 100)
     private String name;
 
     @NotNull
+    @Size(min = 6)
     private  String password;
 
     @Override

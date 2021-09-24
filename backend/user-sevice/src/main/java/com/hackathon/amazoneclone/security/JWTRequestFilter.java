@@ -1,6 +1,12 @@
 package com.hackathon.amazoneclone.security;
 
+import com.hackathon.amazoneclone.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -19,34 +25,34 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JWTRequestFilter extends OncePerRequestFilter {
 
-//    private final UserService userService;
-//    private final JWTUtils jwtUtils;
+    private final UserService userService;
+    private final JWTUtils jwtUtils;
 
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String authorization = request.getHeader("Authorization");
-//
-//        if(authorization!=null && authorization.startsWith("Bearer ")){
-//            final String bearerToken = authorization.replaceFirst("Bearer ","");
-//
-//            final String userEmail = jwtUtils.extractSubject(bearerToken);
-//            // get security context
-//            SecurityContext context = SecurityContextHolder.getContext();
-//            if(userEmail!=null && context.getAuthentication()==null){
-//                UserDetails userDetails = userService.loadUserByUsername(userEmail);
-//                if(jwtUtils.validateToken(bearerToken,userDetails)){
-//                    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken= new UsernamePasswordAuthenticationToken(
-//                            userDetails,null,userDetails.getAuthorities()
-//                    );
-//                    usernamePasswordAuthenticationToken.setDetails(
-//                            new WebAuthenticationDetailsSource().buildDetails(request)
-//                    );
-//                    context.setAuthentication(usernamePasswordAuthenticationToken);
-//                }
-//            }
-//        }
-//
+
+        if(authorization!=null && authorization.startsWith("Bearer ")){
+            final String bearerToken = authorization.replaceFirst("Bearer ","");
+
+            final String userEmail = jwtUtils.extractSubject(bearerToken);
+            // get security context
+            SecurityContext context = SecurityContextHolder.getContext();
+            if(userEmail!=null && context.getAuthentication()==null){
+                UserDetails userDetails = userService.loadUserByUsername(userEmail);
+                if(jwtUtils.validateToken(bearerToken,userDetails)){
+                    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken= new UsernamePasswordAuthenticationToken(
+                            userDetails,null,userDetails.getAuthorities()
+                    );
+                    usernamePasswordAuthenticationToken.setDetails(
+                            new WebAuthenticationDetailsSource().buildDetails(request)
+                    );
+                    context.setAuthentication(usernamePasswordAuthenticationToken);
+                }
+            }
+        }
+
 
         filterChain.doFilter(request, response);
     }

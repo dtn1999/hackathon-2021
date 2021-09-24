@@ -1,18 +1,28 @@
 import React from "react";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import Link from "next/link";
 import Aggreement from "../../components/Aggreement";
 
 const loginPage = () => {
+    const router = useRouter();
+    const  navigateToRegistration = React.useCallback(()=>{
+            router.push("/auth/register")
+    },[]);
     return (
-        <div className="bg-white flex flex-col items-center pt-2">
+        <div className="bg-white flex flex-col items-center pt-16">
             <div className="flex flex-row justify-items-center">
-                <Image
-                    className="object-cover"
-                    src="/Amazon logo.png"
-                    alt="Amazone logo"
-                    width={140}
-                    height={40}
-                />
+                <Link href="/">
+                    <a>
+                        <Image
+                            className="object-cover"
+                            src="/Amazon logo.png"
+                            alt="Amazone logo"
+                            width={140}
+                            height={40}
+                        />
+                    </a>
+                </Link>
             </div>
             <div className="min-w-max mt-3">
                 <form
@@ -72,7 +82,7 @@ const loginPage = () => {
                     <div className="flex-1 border bg-amazon my-5"></div>
                 </div>
 
-                <button className="bg-gray-200 w-full font-normal rounded-sm border py-1.5 text-sm">
+                <button className="bg-gray-200 w-full font-normal rounded-sm border py-1.5 text-sm" onClick={navigateToRegistration}>
                     Create Your Amazone clone account
                 </button>
             </div>

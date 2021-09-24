@@ -1,6 +1,5 @@
 package com.hackathon.amazoneclone.security;
 
-import com.hackathon.amazoneclone.user.LoginDetail;
 import com.hackathon.amazoneclone.user.User;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,10 +11,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
  */
 public class SecurityUtils {
 
-
     public static User getUserFromSecurityContext(){
         SecurityContext context = SecurityContextHolder.getContext();
-        LoginDetail loginDetail = (LoginDetail) context.getAuthentication().getPrincipal();
-        return loginDetail.getUser();
+        return  (User) context.getAuthentication().getPrincipal();
     }
 }

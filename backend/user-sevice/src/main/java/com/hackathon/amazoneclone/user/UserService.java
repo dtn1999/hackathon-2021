@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Valid;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -24,35 +25,22 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
-    private final LoginDetailRepository loginDetailRepository;
-    // import the jwt util to create token after successful login or registration
     private final JWTUtils jwtUtils;
     private  final PasswordEncoder passwordEncoder;
 
-    public ApiResponse registerUser(RegisterRequest request) {
-        User user = User.builder()
-                .lastName(request.getLastName())
-                .firstName(request.getFirstName())
-                .sex(request.getSex())
-                .birthday(request.getBirthday())
+    public ApiResponse registerUser(@Valid RegisterRequest request) {
+        User user = userRepository.save(
+                User.builder()
+                .password( request.getPassword())
+                .name( request.getName())
                 .role(request.getRole())
                 .email(request.getEmail())
-                .build();
-        User savedUser = userRepository.save(user);
-        LoginDetail loginDetail = LoginDetail.builder()
-                .authProvider(AuthProvider.EMAIL)
-                .password(request.getPassword())
-                .user( savedUser )
-                .build();
+                .build());
 
-        loginDetailRepository.save(loginDetail);
-
-
-
-        return ApiResponse.builder()
+    return ApiResponse.builder()
                 .success( true )
                 .data( AuthResponse.builder()
-                        .accessToken( jwtUtils.generateToken( loginDetail.getUsername()))
+                        .accessToken( jwtUtils.generateToken( user.getUsername()))
                         .expiration( jwtUtils.getExpirationDuration() )
                         .build() )
                 .error(null)
@@ -61,18 +49,18 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<LoginDetail> loginDetails = loginDetailRepository.findLoginDetailByUser_Email(email);
-        return loginDetails.orElseThrow( ()-> new UsernameNotFoundException(String.format("User with email %s could not be found", email)));
+        Optional<User> user = userRepository.findUserByEmail(email);
+        return user.orElseThrow( ()-> new UsernameNotFoundException(String.format("User with email %s could not be found", email)));
     }
 
-    public ApiResponse login(LoginRequest request) {
-        Optional<LoginDetail> loginDetail = loginDetailRepository.findLoginDetailByUser_Email(request.getEmail());
-        if(loginDetail.isPresent() ){
-            if( request.getAuthProvider()==AuthProvider.EMAIL && passwordEncoder.matches(request.getPassword(), loginDetail.get().getPassword())){
+    public ApiResponse login(@Valid  LoginRequest request) {
+        Optional<User> user = userRepository.findUserByEmail(request.getEmail());
+        if(user.isPresent() ){
+            if( passwordEncoder.matches(request.getPassword(), user.get().getPassword())){
                 return ApiResponse.builder()
                         .success( true )
                         .data( AuthResponse.builder()
-                                .accessToken( jwtUtils.generateToken( loginDetail.get().getUsername() ))
+                                .accessToken( jwtUtils.generateToken( user.get().getUsername() ))
                                 .expiration( jwtUtils.getExpirationDuration() )
                                 .build() )
                         .error(null)
