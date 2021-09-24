@@ -7,12 +7,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * @author danyls ngongang
@@ -26,14 +26,12 @@ import java.util.Set;
 @SuperBuilder
 public class OrderItem extends BaseEntity {
 
-    @ManyToMany
-    @JoinTable(
-            name = "order_products",
-            joinColumns = @JoinColumn( name = "order_item_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id" )
+    @ManyToOne
+    private Product product;
 
-    )
-    private Set<Product> products = new HashSet<>();
+    @NotNull
+    @Min(value = 1)
+    private Integer quantity;
 
     @NotNull
     @DecimalMin(value = "0.00")

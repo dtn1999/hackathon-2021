@@ -43,7 +43,18 @@ function Checkout() {
         }
     }
 
+    const formatToOrder = (elements) => {
+        const orderItems = elements.map((el) => {
+            return {
+                product: el[0],
+                quantity: el.length,
+                subPrice: el.length * el[0].price,
+            };
+        });
+    };
     const groupedItems = Object.values(groupBy(items, "id"));
+    const order = formatToOrder(groupedItems);
+
     console.log("groupedItems", groupedItems);
     return (
         <div className="bg-gray-100">

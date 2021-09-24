@@ -5,17 +5,21 @@ import {
     SearchIcon,
     ShoppingCartIcon,
 } from "@heroicons/react/outline";
-import { signIn, signOut, useSession } from "next-auth/client";
+import { signIn, useSession } from "next-auth/client";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import { selectItems } from "../slices/basketSlice";
 import AuthContext from "../context/AuthContext";
-
+import RestClient from "../services/RestClient";
 function Header(props) {
     const [session] = useSession();
     const router = useRouter();
     const items = useSelector(selectItems);
-    const { user } = React.useContext(AuthContext);
+    const { user, setUser } = React.useContext(AuthContext);
+    const signOut = () => {
+        setUser(undefined);
+        RestClient.logUserOut();
+    };
     console.log(user);
     return (
         <header className="sticky top-0 z-50">
@@ -54,7 +58,7 @@ function Header(props) {
                 <div className="text-white flex items-center text-xs space-x-6 mx-6 whitespace-nowrap">
                     <div
                         onClick={
-                            !user
+                            !user.username
                                 ? () => {
                                       router.push("/auth/login");
                                   }
@@ -62,7 +66,9 @@ function Header(props) {
                         }
                         className="link cursor-pointer">
                         <p className="hover:underline">
-                            {user ? `Hello, ${user.username}` : "Sign In"}
+                            {user.username
+                                ? `Hello, ${user.username}`
+                                : "Sign In"}
                         </p>
                         <p className="font-extrabold md:text-sm">
                             Account & Lists
