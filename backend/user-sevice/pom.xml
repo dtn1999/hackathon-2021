@@ -102,6 +102,13 @@
             <artifactId>springdoc-openapi-security</artifactId>
             <version>${spring.doc.version}</version>
         </dependency>
+
+        <!-- sendgrid -->
+        <dependency>
+            <groupId>com.sendgrid</groupId>
+            <artifactId>sendgrid-java</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

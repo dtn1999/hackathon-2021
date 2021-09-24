@@ -11,3 +11,6 @@ spring:
 
   swagger-ui:
     path: /swagger-ui.html
+
+app:
+  sendgrid: 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

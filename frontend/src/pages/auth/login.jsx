@@ -3,12 +3,23 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Aggreement from "../../components/Aggreement";
+import { useFormik } from "formik";
+import { loginFormValidation, loginIntialValues } from "./forms";
+import RestClient from "../../services/RestClient";
 
 const loginPage = () => {
     const router = useRouter();
-    const  navigateToRegistration = React.useCallback(()=>{
-            router.push("/auth/register")
-    },[]);
+    const navigateToRegistration = React.useCallback(() => {
+        router.push("/auth/register");
+    }, []);
+
+    const formik = useFormik({
+        initialValues: loginIntialValues,
+        validationSchema: loginFormValidation,
+        onSubmit: async (values, { resetForm, setErrors }) => {
+            const response = await RestClient.logUserIn(values);
+        },
+    });
     return (
         <div className="bg-white flex flex-col items-center pt-16">
             <div className="flex flex-row justify-items-center">
@@ -40,8 +51,24 @@ const loginPage = () => {
                         <div className="mt-1">
                             <input
                                 type="text"
-                                className="w-full rounded-sm border py-0.5 focus:ring-1 focus:ring-amazon focus:border-amazon focus:outline-none"
+                                id="email"
+                                value={formik.values.email}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                className={`px-2 w-full rounded-sm border py-0.5 focus:ring-1 focus:ring-amazon focus:border-amazon focus:outline-none ${
+                                    formik.errors.email
+                                        ? "border-red-400 ring-2 ring-red-400"
+                                        : ""
+                                }`}
                             />
+                            {formik.errors.email ? (
+                                <span className="text-sm font-normal mt-4 text-red-500">
+                                    {" "}
+                                    {formik.errors.email}{" "}
+                                </span>
+                            ) : (
+                                <></>
+                            )}
                         </div>
                     </div>
                     <div>
@@ -61,8 +88,24 @@ const loginPage = () => {
                         <div className="mt-1">
                             <input
                                 type="text"
-                                className="w-full rounded-sm border py-0.5 focus:ring-1 focus:ring-amazon focus:border-amazon focus:outline-none"
+                                id="password"
+                                value={formik.values.password}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                className={`px-2 w-full rounded-sm border py-0.5 focus:ring-1 focus:ring-amazon focus:border-amazon focus:outline-none ${
+                                    formik.errors.password
+                                        ? "border-red-400 ring-2 ring-red-400"
+                                        : ""
+                                }`}
                             />
+                            {formik.errors.password ? (
+                                <span className="text-sm font-normal mt-4 text-red-500">
+                                    {" "}
+                                    {formik.errors.password}{" "}
+                                </span>
+                            ) : (
+                                <></>
+                            )}
                         </div>
                     </div>
 
@@ -82,7 +125,9 @@ const loginPage = () => {
                     <div className="flex-1 border bg-amazon my-5"></div>
                 </div>
 
-                <button className="bg-gray-200 w-full font-normal rounded-sm border py-1.5 text-sm" onClick={navigateToRegistration}>
+                <button
+                    className="bg-gray-200 w-full font-normal rounded-sm border py-1.5 text-sm"
+                    onClick={navigateToRegistration}>
                     Create Your Amazone clone account
                 </button>
             </div>
