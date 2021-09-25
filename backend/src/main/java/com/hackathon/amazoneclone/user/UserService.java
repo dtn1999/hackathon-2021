@@ -5,7 +5,7 @@ import com.hackathon.amazoneclone.security.JWTUtils;
 import com.hackathon.amazoneclone.user.dto.AuthResponse;
 import com.hackathon.amazoneclone.user.dto.LoginRequest;
 import com.hackathon.amazoneclone.user.dto.RegisterRequest;
-import com.hackathon.amazoneclone.utils.ApiResponse;
+import com.hackathon.amazoneclone.utils.APIResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,7 +32,7 @@ public class UserService implements UserDetailsService {
     private final MailService mailService;
     private final Environment env;
 
-    public ApiResponse registerUser(@Valid RegisterRequest request) {
+    public APIResponse registerUser(@Valid RegisterRequest request) {
         User user = userRepository.save(
                 User.builder()
                 .password( passwordEncoder.encode(request.getPassword() ))
@@ -41,7 +41,7 @@ public class UserService implements UserDetailsService {
                 .email(request.getEmail())
                 .build());
 
-        return ApiResponse.builder()
+        return APIResponse.builder()
                 .success( true )
                 .data( AuthResponse.builder()
                         .accessToken( jwtUtils.generateToken( user.getUsername()))
@@ -59,11 +59,11 @@ public class UserService implements UserDetailsService {
         return user.orElseThrow( ()-> new UsernameNotFoundException(String.format("User with email %s could not be found", email)));
     }
 
-    public ApiResponse login(@Valid  LoginRequest request) {
+    public APIResponse login(@Valid  LoginRequest request) {
         Optional<User> user = userRepository.findUserByEmail(request.getEmail());
         if(user.isPresent() ){
             if( passwordEncoder.matches(request.getPassword(), user.get().getPassword())){
-                return ApiResponse.builder()
+                return APIResponse.builder()
                         .success( true )
                         .data( AuthResponse.builder()
                                 .accessToken( jwtUtils.generateToken( user.get().getUsername() ))

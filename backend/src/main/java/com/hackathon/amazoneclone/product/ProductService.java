@@ -1,6 +1,6 @@
 package com.hackathon.amazoneclone.product;
 
-import com.hackathon.amazoneclone.utils.ApiResponse;
+import com.hackathon.amazoneclone.utils.APIResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,9 +18,9 @@ import java.util.UUID;
 public class ProductService {
     private final ProductRepository projectRepository;
 
-    public ApiResponse addAllProducts(@NotNull Set<Product> products){
+    public APIResponse addAllProducts(@NotNull Set<Product> products){
 
-        return ApiResponse.builder()
+        return APIResponse.builder()
                 .success( true )
                 .data(projectRepository.saveAll( products ))
                 .error( null )
@@ -28,24 +28,24 @@ public class ProductService {
 
     }
 
-    public ApiResponse save(Product product) {
-        return ApiResponse.builder()
+    public APIResponse save(Product product) {
+        return APIResponse.builder()
                 .success( true )
                 .data( projectRepository.save(product))
                 .error( null )
                 .build();
     }
 
-    public ApiResponse getAllProducts() {
-        return ApiResponse.builder()
+    public APIResponse getAllProducts() {
+        return APIResponse.builder()
                 .success( true )
                 .data( projectRepository.findAll() )
                 .error(null)
                 .build();
     }
 
-    public ApiResponse getProductById(@NotNull UUID productId){
-        return ApiResponse.builder()
+    public APIResponse getProductById(@NotNull UUID productId){
+        return APIResponse.builder()
                 .success( true )
                 .error( null )
                 .data( projectRepository.findById( productId))

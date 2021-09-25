@@ -5,19 +5,17 @@ import com.hackathon.amazoneclone.security.JWTUtils;
 import com.hackathon.amazoneclone.user.dto.AuthResponse;
 import com.hackathon.amazoneclone.user.dto.LoginRequest;
 import com.hackathon.amazoneclone.user.dto.RegisterRequest;
-import com.hackathon.amazoneclone.utils.ApiResponse;
+import com.hackathon.amazoneclone.utils.APIResponse;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -58,7 +56,7 @@ class UserControllerTest {
 
 
         Mockito.when( userService.registerUser(request)).thenReturn(
-                ApiResponse.builder()
+                APIResponse.builder()
                         .data(AuthResponse.builder()
                                 .accessToken(jwtUtils.generateToken(request.getEmail()))
                                 .expiration(jwtUtils.getExpirationDuration())
@@ -91,7 +89,7 @@ class UserControllerTest {
 
 
         Mockito.when( userService.registerUser(request)).thenReturn(
-                ApiResponse.builder()
+                APIResponse.builder()
                         .data(AuthResponse.builder()
                                 .accessToken(jwtUtils.generateToken(request.getEmail()))
                                 .expiration(jwtUtils.getExpirationDuration())
@@ -111,7 +109,7 @@ class UserControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect( status().isCreated() )
                 .andExpect( result -> {
-                    ApiResponse apiResponse = objectMapper.readValue(result.getResponse().getContentAsString(), ApiResponse.class);
+                    APIResponse apiResponse = objectMapper.readValue(result.getResponse().getContentAsString(), APIResponse.class);
                     Assertions.assertTrue( apiResponse.isSuccess() );
                     Assertions.assertNull( apiResponse.getError() );
                     Assertions.assertNotNull( apiResponse.getData() );
@@ -128,7 +126,7 @@ class UserControllerTest {
 
         Mockito.when( userService.login(request) )
                 .thenReturn(
-                        ApiResponse.builder()
+                        APIResponse.builder()
                                 .success( true )
                                 .data( AuthResponse.builder()
                                         .accessToken(jwtUtils.generateToken(request.getEmail()))
@@ -157,7 +155,7 @@ class UserControllerTest {
 
         Mockito.when( userService.login(request) )
                 .thenReturn(
-                        ApiResponse.builder()
+                        APIResponse.builder()
                                 .success( true )
                                 .data( AuthResponse.builder()
                                         .accessToken(jwtUtils.generateToken(request.getEmail()))
@@ -175,7 +173,7 @@ class UserControllerTest {
         )
                 .andExpect( status().isOk())
                 .andExpect( result -> {
-                    ApiResponse apiResponse = objectMapper.readValue(result.getResponse().getContentAsString(), ApiResponse.class);
+                    APIResponse apiResponse = objectMapper.readValue(result.getResponse().getContentAsString(), APIResponse.class);
                     Assertions.assertNotNull( apiResponse );
                     Assertions.assertTrue( apiResponse.isSuccess() );
                     Assertions.assertNotNull( apiResponse.getData() );

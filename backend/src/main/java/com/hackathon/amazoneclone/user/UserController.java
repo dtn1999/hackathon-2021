@@ -3,6 +3,7 @@ package com.hackathon.amazoneclone.user;
 import com.hackathon.amazoneclone.user.dto.AuthResponse;
 import com.hackathon.amazoneclone.user.dto.LoginRequest;
 import com.hackathon.amazoneclone.user.dto.RegisterRequest;
+import com.hackathon.amazoneclone.utils.APIResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -37,7 +38,7 @@ public class UserController {
     })
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public com.hackathon.amazoneclone.utils.ApiResponse register(@RequestBody @Valid RegisterRequest request) {
+    public APIResponse register(@RequestBody @Valid RegisterRequest request) {
         return userService.registerUser(request);
     }
 
@@ -52,7 +53,7 @@ public class UserController {
     })
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
-    public com.hackathon.amazoneclone.utils.ApiResponse login(@RequestBody @Valid LoginRequest request){
+    public APIResponse login(@RequestBody @Valid LoginRequest request){
         return userService.login(request);
     }
 }

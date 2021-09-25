@@ -1,6 +1,6 @@
 package com.hackathon.amazoneclone.handler;
 
-import com.hackathon.amazoneclone.utils.ApiResponse;
+import com.hackathon.amazoneclone.utils.APIResponse;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +26,7 @@ public class RestControllerAdvise extends ResponseEntityExceptionHandler {
     public ResponseEntity handleValidationException(RuntimeException ex, WebRequest request){
 
         return ResponseEntity.ok(
-                ApiResponse.builder()
+                APIResponse.builder()
                         .data(null)
                         .error( ex.getMessage() )
                         .success( false )
