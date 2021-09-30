@@ -45,9 +45,10 @@ export default function Home({ products }) {
 // Here, it's executed by Node.js
 export async function getServerSideProps(context) {
     const session = await getSession(context);
-    const response = await fetch("http://localhost:8087/api/products").then(
-        (res) => res.json()
-    );
+    // bad practice
+    const response = await fetch(
+        "https://dtn1999-learn.herokuapp.com/api/products"
+    ).then((res) => res.json());
 
     if (response.success) {
         const { data: products } = response;
