@@ -4,7 +4,6 @@
 
 This project contents the implementation of our project during the 2021 Hackathon. During this hackathon we try to create a simple amazone clone. The main focus for our team was the backend part. Below is the list of currently avalaible features. 
 
-## GITREPOSITORY : https://github.com/dtn1999/hackathon-2021.git
 
 ## TECHNOLOGY STACK
 
