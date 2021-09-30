@@ -75,3 +75,5 @@
 sendgrid.env
 
 **/application-secret.yml
+
+.vercel
