@@ -6,7 +6,10 @@ import { useRouter } from "next/router";
 import { useFormik } from "formik";
 import AuthContext from "../../context/AuthContext";
 import RestClient from "../../services/RestClient";
-import { registrationFormValidation, registrationIntialValues } from "./forms";
+import {
+    registrationFormValidation,
+    registrationIntialValues,
+} from "../../types/forms";
 
 const RegisterPage = () => {
     const router = useRouter();

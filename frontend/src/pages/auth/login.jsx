@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import Aggreement from "../../components/Aggreement";
 import { useFormik } from "formik";
-import { loginFormValidation, loginIntialValues } from "./forms";
+import { loginFormValidation, loginIntialValues } from "../../types/forms";
 import AuthContext from "../../context/AuthContext";
 import RestClient from "../../services/RestClient";
 

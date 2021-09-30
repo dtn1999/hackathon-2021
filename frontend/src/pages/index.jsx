@@ -45,7 +45,7 @@ export default function Home({ products }) {
 // Here, it's executed by Node.js
 export async function getServerSideProps(context) {
     const session = await getSession(context);
-    const response = await fetch("http://localhost:8080/api/products").then(
+    const response = await fetch("http://localhost:8087/api/products").then(
         (res) => res.json()
     );
 
